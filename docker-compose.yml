@@ -1,0 +1,19 @@
+services:
+    api-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.api
+        tty: True
+        volumes:
+            - ./api:/app/
+            - ./logs:/app/logs
+        command: python3 src/main.py
+
+    nginx:
+        image: nginx:latest
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        depends_on:
+            - api-service
